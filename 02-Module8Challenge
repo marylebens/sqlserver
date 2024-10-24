@@ -26,33 +26,37 @@ USE Northwind;
 Retrieve a list of products. 
 The list should include the product name, unit price, 
 and how many units Northwind has in stock.
-*/
 
+
+*/
+sqlcmd -S localhost -U sa -P P@ssw0rd -d Northwind -Q "SELECT * FROM Products;"
 /
 *2.	
 List the product name and units in stock for products where UnitsInStock equals zero.
 */
-
+sqlcmd -S localhost -U sa -P P@ssw0rd -d Northwind -Q "SELECT ProductName,UnitsInStock  FROM Products where UnitsInStock = 0 "
 /*
 3.	List the product name and the unit price for each product. 
 Sort the list with the smallest unit price on top.
 */
-
+sqlcmd -S localhost -U sa -P P@ssw0rd -d Northwind -Q "SELECT ProductName, UnitPrice  FROM Products order by UnitPrice  "
 
 /*
 4.	List all products with the brand "Sir Rodney's" in the product name. 
 */
+ sqlcmd -S localhost -U sa -P P@ssw0rd -d Northwind -Q "SELECT *  FROM Products where ProductName Like 'Sir Rodney%'  "
+ --This one took me way longer than it should to figure out T_T
 
 
 /*
 5.	Create a list of product names and product IDs for products 
 with supplier ID 20. Order by product name. */
-
+sqlcmd -S localhost -U sa -P P@ssw0rd -d Northwind -Q "SELECT ProductName, ProductID  FROM Products where SupplierID = 20 order by ProductName "
 /*
 6.	List the product ID and product name for products with 
 zero units on order. Order by product ID. 
 */
-
+sqlcmd -S localhost -U sa -P P@ssw0rd -d Northwind -Q "SELECT ProductName, ProductID  FROM Products where UnitsOnOrder = 0"
 /*
 7. Your boss has asked you for a list of orders for
        the employee Janet Leverling. 
@@ -61,19 +65,30 @@ zero units on order. Order by product ID.
 	   helped place the order.
        (Hint: Use a JOIN to retrieve data from more than one table.)
 */
-
+sqlcmd -S localhost -U sa -P P@ssw0rd -d Northwind -Q "select o.OrderID, c.CompanyName, e.FirstName, e.LastName
+> from Orders o
+> join Employees e on e.EmployeeID = o.EmployeeID
+> join Customers c on c.CustomerID = o.CustomerID
+> where e.EmployeeID = 3;"
 /*
 8. Insert a new record into the products table with a product name
     that is your favorite food, a unit price that is $4.55, supplier ID 26, and category ID 5.
 */
- 
+ sqlcmd -S localhost -U sa -P P@ssw0rd -d Northwind -Q "insert into Products
+( ProductName, SupplierID, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued)
+values ( 'Bandit Rub BBQ Ribs', 26,5, '40 boxes', '4.55', 50, 50,25,0)"
 
 
 /*
 9. Display the new record you added to the products table 
 where the product name is your favorite food.
 */
+sqlcmd -S localhost -U sa -P P@ssw0rd -d Northwind -Q "Select * from Products Where ProductName = 'Bandit Rub BBQ Ribs'"
+ProductID   ProductName                              SupplierID  CategoryID  QuantityPerUnit      UnitPrice             UnitsInStock UnitsOnOrder ReorderLevel Discontinued
+----------- ---------------------------------------- ----------- ----------- -------------------- --------------------- ------------ ------------ ------------ ------------
+         79 Bandit Rub BBQ Ribs                               26           5 40 boxes                            4.5500           50           50           25            0
 
+(1 rows affected)
 /*
 10. Insert a record into the suppliers table.
     The record should contain the following values:
@@ -84,17 +99,26 @@ where the product name is your favorite food.
 	- 123 Sesame Street as the address
     - Saint Paul as the city
 */
- 
+ sqlcmd -S localhost -U sa -P P@ssw0rd -d Northwind -Q " Insert into Suppliers ( CompanyName,  ContactName, ContactTitle, Address, City,  PostalCode, Country, Phone)
+> values ('Minneapolis Community & Techical College', 'Avery Houston', 'Manger', '123 Sesame Street', 'Saint Paul', 55406,'USA', 612232066);"
+
+(1 rows affected)
 /*
 11. Display the new record that you created in the suppliers
     table to ensure it was inserted correctly.
 */
+pplierID  CompanyName                              ContactName                    ContactTitle                   Address                                                      City            Region          PostalCode Country         Phone                    Fax                      HomePage                                                                                                                                                                                                                                                        
+----------- ---------------------------------------- ------------------------------ ------------------------------ ------------------------------------------------------------ --------------- --------------- ---------- --------------- ------------------------ ------------------------ ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+         30 Minneapolis Community & Techical College Avery Houston                  Manger                         123 Sesame Street                                            Saint Paul      NULL            55406      USA             612232066                NULL                     NULL                                                                                                                                                                                                                                                            
 
+(1 rows affected)
 /*
 12. Update the record in the products table for your favorite food.
 Change the unit price from $4.55 to $9.99.
 */
+ sqlcmd -S localhost -U sa -P P@ssw0rd -d Northwind -Q "update Products set UnitPrice = 9.99 where ProductName = 'Bandit Rub BBQ Ribs'"
 
+(1 rows affected)
 /*
 13. Insert a new record into the Categories table. 
 Insert the values 'Ice Cream'and 'Frosty desserts' into the 
@@ -103,11 +127,15 @@ a value into the CategoryID column because that it auto-populated.
 You don't need to insert a value into the Picture column 
 because it is optional.
 */
+sqlcmd -S localhost -U sa -P P@ssw0rd -d Northwind -Q "insert into Categories ( CategoryName,Description) values( 'Ice Cream', 'Frosty Desert')"
 
+(1 rows affected)
 /*
 14. Delete the record you just inserted into the Categories table.
 */
- 
+ sqlcmd -S localhost -U sa -P P@ssw0rd -d Northwind -Q "delete from Categories where CategoryID = 9"
+
+(1 rows affected)
 
 
 
